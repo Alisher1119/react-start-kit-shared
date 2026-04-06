@@ -1,0 +1,265 @@
+{
+  "name": "react-start-kit-shared",
+  "version": "1.0.0",
+  "description": "Custom ui library using React.js, Shadcn/ui, TailwindCSS, Typescript, react-start-kit library",
+  "keywords": [
+    "react-start-kit",
+    "react-hook-form",
+    "react.js",
+    "shadcn/ui",
+    "tailwindcss@4",
+    "typescript",
+    "ui-lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alisher1119/react-start-kit-shared.git"
+  },
+  "license": "MIT",
+  "author": "alisher1119",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./components/actions": {
+      "types": "./dist/types/components/actions/index.d.ts",
+      "import": "./dist/components/actions/index.es.js",
+      "require": "./dist/components/actions/index.cjs.js"
+    },
+    "./components/confirm": {
+      "types": "./dist/types/components/confirm/index.d.ts",
+      "import": "./dist/components/confirm/index.es.js",
+      "require": "./dist/components/confirm/index.cjs.js"
+    },
+    "./components/datatable": {
+      "types": "./dist/types/components/datatable/index.d.ts",
+      "import": "./dist/components/datatable/index.es.js",
+      "require": "./dist/components/datatable/index.cjs.js"
+    },
+    "./components/datepicker": {
+      "types": "./dist/types/components/datepicker/index.d.ts",
+      "import": "./dist/components/datepicker/index.es.js",
+      "require": "./dist/components/datepicker/index.cjs.js"
+    },
+    "./components/empty": {
+      "types": "./dist/types/components/empty/index.d.ts",
+      "import": "./dist/components/empty/index.es.js",
+      "require": "./dist/components/empty/index.cjs.js"
+    },
+    "./components/export": {
+      "types": "./dist/types/components/export/index.d.ts",
+      "import": "./dist/components/export/index.es.js",
+      "require": "./dist/components/export/index.cjs.js"
+    },
+    "./components/filters": {
+      "types": "./dist/types/components/filters/index.d.ts",
+      "import": "./dist/components/filters/index.es.js",
+      "require": "./dist/components/filters/index.cjs.js"
+    },
+    "./components/form": {
+      "types": "./dist/types/components/form/index.d.ts",
+      "import": "./dist/components/form/index.es.js",
+      "require": "./dist/components/form/index.cjs.js"
+    },
+    "./components/gallery": {
+      "types": "./dist/types/components/gallery/index.d.ts",
+      "import": "./dist/components/gallery/index.es.js",
+      "require": "./dist/components/gallery/index.cjs.js"
+    },
+    "./components/loader": {
+      "types": "./dist/types/components/loader/index.d.ts",
+      "import": "./dist/components/loader/index.es.js",
+      "require": "./dist/components/loader/index.cjs.js"
+    },
+    "./components/modal": {
+      "types": "./dist/types/components/modal/index.d.ts",
+      "import": "./dist/components/modal/index.es.js",
+      "require": "./dist/components/modal/index.cjs.js"
+    },
+    "./components/pagination": {
+      "types": "./dist/types/components/pagination/index.d.ts",
+      "import": "./dist/components/pagination/index.es.js",
+      "require": "./dist/components/pagination/index.cjs.js"
+    },
+    "./components/scroll": {
+      "types": "./dist/types/components/scroll/index.d.ts",
+      "import": "./dist/components/scroll/index.es.js",
+      "require": "./dist/components/scroll/index.cjs.js"
+    },
+    "./components/theme": {
+      "types": "./dist/types/components/theme/index.d.ts",
+      "import": "./dist/components/theme/index.es.js",
+      "require": "./dist/components/theme/index.cjs.js"
+    },
+    "./components/tooltip": {
+      "types": "./dist/types/components/tooltip/index.d.ts",
+      "import": "./dist/components/tooltip/index.es.js",
+      "require": "./dist/components/tooltip/index.cjs.js"
+    },
+    "./enums": {
+      "types": "./dist/types/enums/index.d.ts",
+      "import": "./dist/enums/index.es.js",
+      "require": "./dist/enums/index.cjs.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/hooks/index.d.ts",
+      "import": "./dist/hooks/index.es.js",
+      "require": "./dist/hooks/index.cjs.js"
+    },
+    "./utils": {
+      "types": "./dist/types/utils/index.d.ts",
+      "import": "./dist/utils/index.es.js",
+      "require": "./dist/utils/index.cjs.js"
+    },
+    "./providers": {
+      "types": "./dist/types/providers/index.d.ts",
+      "import": "./dist/providers/index.es.js",
+      "require": "./dist/providers/index.cjs.js"
+    },
+    "./stores": {
+      "types": "./dist/types/stores/index.d.ts",
+      "import": "./dist/stores/index.es.js",
+      "require": "./dist/stores/index.cjs.js"
+    },
+    "./types": {
+      "types": "./dist/types/types/index.d.ts"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types/index.d.ts"
+      ],
+      "components/*": [
+        "./dist/types/components/*/index.d.ts"
+      ],
+      "enums": [
+        "./dist/types/enums/index.d.ts"
+      ],
+      "hooks": [
+        "./dist/types/hooks/index.d.ts"
+      ],
+      "providers": [
+        "./dist/types/providers/index.d.ts"
+      ],
+      "stores": [
+        "./dist/types/stores/index.d.ts"
+      ],
+      "types": [
+        "./dist/types/types/index.d.ts"
+      ],
+      "utils": [
+        "./dist/types/utils/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "build:test": "npm run build && npm link",
+    "build-storybook": "storybook build",
+    "clean": "rm -rf dist",
+    "dev": "vite",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "eslint ./src --fix --max-warnings 50",
+    "prepare": "husky",
+    "prepublishOnly": "npm run clean && npm run build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "overrides": {
+    "quill": "2.0.2"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "file-saver": "^2.0.5",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
+    "lucide-react": "^0.563.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "react-hook-form": "^7.71.1",
+    "react-responsive": "^10.0.1",
+    "react-start-kit": "^1.0.0",
+    "react-toastify": "^11.0.5",
+    "tailwindcss": "^4.1.18",
+    "zod": "^3.25.67",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
+    "@eslint/js": "^9.25.0",
+    "@storybook/addon-a11y": "^10.2.8",
+    "@storybook/addon-docs": "^10.2.8",
+    "@storybook/addon-vitest": "^10.2.8",
+    "@storybook/react-vite": "^10.2.8",
+    "@tailwindcss/vite": "^4.1.7",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/file-saver": "^2.0.7",
+    "@types/lodash.get": "^4.4.9",
+    "@types/lodash.isempty": "^4.4.9",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "@vitest/browser": "^3.1.4",
+    "@vitest/coverage-v8": "^3.1.4",
+    "eslint": "^9.25.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-storybook": "^10.2.8",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
+    "knip": "^5.82.1",
+    "playwright": "^1.58.2",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-packagejson": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "storybook": "^10.2.8",
+    "tslib": "^2.8.1",
+    "tw-animate-css": "^1.3.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.1.4"
+  },
+  "peerDependencies": {
+    "i18next": "^25.8.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "react-i18next": "^16.5.4"
+  },
+  "peerDependenciesMeta": {
+    "i18next": {
+      "optional": true
+    },
+    "react-i18next": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
