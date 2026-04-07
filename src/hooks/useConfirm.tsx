@@ -13,7 +13,7 @@ import type { ConfirmPasswordDto } from '../schemas';
  */
 export const useConfirm = () => {
   const confirm = useCallback(({ onConfirm }: { onConfirm: () => void }) => {
-    const toastId = crypto.randomUUID();
+    const toastId = Math.random().toString(36).substring(2, 10);
     toast.warning(<></>, {
       toastId: toastId,
       autoClose: false,
@@ -42,7 +42,7 @@ export const useConfirm = () => {
       title?: ReactNode;
       description?: ReactNode;
     }) => {
-      const toastId = crypto.randomUUID();
+      const toastId = Math.random().toString(36).substring(2, 10);
       toast.warning(<></>, {
         position: 'bottom-left',
         toastId: toastId,
