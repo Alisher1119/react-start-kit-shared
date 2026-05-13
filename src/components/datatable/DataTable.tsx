@@ -260,7 +260,7 @@ export const DataTable = <
   ...props
 }: DataTableProps<TData, TPaginationData>) => {
   const { t } = useTranslation();
-  const { formattedColumns, handleColumnsChange, resetColumns } =
+  const { formattedColumns, handleColumnsChange, moveColumn, resetColumns } =
     useColumns<TData>({ key: tableKey, columns });
 
   useEffect(() => {
@@ -406,6 +406,7 @@ export const DataTable = <
             rows={get(dataSource, dataKey, []) as TData[]}
             rowKey={rowKey}
             columns={formattedColumns}
+            onMoveColumn={moveColumn}
             onSortOrderChange={({ sortField, sortOrder }) => {
               onParamChange?.({ ...params, sortField, sortOrder });
             }}

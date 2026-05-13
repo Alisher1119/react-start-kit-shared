@@ -121,7 +121,7 @@ function App() {
           tableKey={'table'}
           hasNumbers
           isStickyHeader
-          loading={true}
+          // loading={true}
           columns={columns}
           exportLoading={true}
           data-testid={'TEST_ID.INCIDENTS.dataTable'}

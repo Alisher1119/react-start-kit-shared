@@ -4,7 +4,7 @@ import {
   ArrowUpDown,
   ArrowUpWideNarrow,
 } from 'lucide-react';
-import { type ComponentProps, useEffect } from 'react';
+import { type ComponentProps, useEffect, useRef, useState } from 'react';
 import { Checkbox } from 'react-start-kit/form';
 import {
   Table,
@@ -52,6 +52,8 @@ export interface MyTableProps<TData> extends ComponentProps<'table'> {
   ) => void;
   /** Whether the header should stick to the top. */
   isStickyHeader?: true;
+  /** Callback to move a column from one key position to another (drag-and-drop). */
+  onMoveColumn?: (fromKey: string, toKey: string) => void;
 }
 
 /**
@@ -90,9 +92,13 @@ export const MyTable = <TData,>({
   onSelectedItemsChange,
   onSortOrderChange,
   isStickyHeader,
+  onMoveColumn,
   className,
   ...props
 }: MyTableProps<TData>) => {
+  const dragKey = useRef<string | null>(null);
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+
   const { sortObject, handleSort } = useSortable<TData>({
     sortField: params?.sortField as keyof TData | undefined,
     sortOrder: params?.sortOrder as SortOrder | undefined,
@@ -135,8 +141,35 @@ export const MyTable = <TData,>({
               <TableHead
                 key={column.key}
                 style={column.styles}
-                className={cn('p-2', column.sortable && 'cursor-pointer')}
+                draggable={!!onMoveColumn}
+                className={cn(
+                  'p-2',
+                  column.sortable && 'cursor-pointer',
+                  onMoveColumn && 'cursor-grab select-none',
+                  dragOverKey === column.key && 'bg-accent/50'
+                )}
                 onClick={() => column.sortable && handleSort(column.dataIndex)}
+                onDragStart={() => {
+                  dragKey.current = column.key;
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (dragKey.current !== column.key) {
+                    setDragOverKey(column.key);
+                  }
+                }}
+                onDragLeave={() => setDragOverKey(null)}
+                onDrop={() => {
+                  if (dragKey.current && dragKey.current !== column.key) {
+                    onMoveColumn?.(dragKey.current, column.key);
+                  }
+                  dragKey.current = null;
+                  setDragOverKey(null);
+                }}
+                onDragEnd={() => {
+                  dragKey.current = null;
+                  setDragOverKey(null);
+                }}
               >
                 <div className={'flex items-center gap-2'}>
                   {column.name}{' '}

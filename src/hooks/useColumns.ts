@@ -16,24 +16,28 @@ export interface UseColumnsProps<TData> {
 }
 
 /**
- * useColumns manages visibility of table columns using a persisted store.
- * Returns formatted columns and helpers to toggle/reset visibility.
+ * useColumns manages visibility and order of table columns using a persisted store.
+ * Returns formatted columns and helpers to toggle/reset visibility and reorder via drag-and-drop.
  *
  * @template TData - Row data type.
- * @param key - Unique key for storing visibility per table.
+ * @param key - Unique key for storing visibility/order per table.
  * @param columns - Original column definitions.
  * @returns {Object} Column management object
- * @returns {ColumnType<TData>[]} formattedColumns - Filtered columns with visibility applied from store
+ * @returns {ColumnType<TData>[]} formattedColumns - Filtered and ordered columns with visibility applied from store
  * @returns {(column: ColumnType<TData>, value: boolean) => void} handleColumnsChange - Function to toggle column visibility
- * @returns {() => void} resetColumns - Function to reset all columns to their default visibility
+ * @returns {() => void} resetColumns - Function to reset all columns to their default visibility and order
+ * @returns {(fromKey: string, toKey: string) => void} moveColumn - Function to move a column from one position to another
  */
 export const useColumns = <TData>({
   key,
   columns = [],
 }: UseColumnsProps<TData>) => {
-  const { storedColumns, setColumns } = useColumnsStore();
+  const { storedColumns, columnOrders, setColumns, setColumnOrder } =
+    useColumnsStore();
 
   useEffect(() => {
+    const dataColumns = columns.filter((c) => c.type !== 'action');
+
     if (isEmpty(get(storedColumns, key)) && !isEmpty(columns)) {
       const columnsObj = {};
       columns.forEach((column) => {
@@ -44,12 +48,20 @@ export const useColumns = <TData>({
         [key]: columnsObj,
       });
     }
-  }, [key, columns, storedColumns, setColumns]);
+
+    if (isEmpty(get(columnOrders, key)) && !isEmpty(dataColumns)) {
+      setColumnOrder(
+        key,
+        dataColumns.map((c) => c.key)
+      );
+    }
+  }, [key, columns, storedColumns, columnOrders, setColumns, setColumnOrder]);
 
   const formattedColumns = useMemo(() => {
     const columnsObj = get(storedColumns, key, {});
+    const order: string[] = get(columnOrders, key, []);
 
-    return columns
+    const dataColumns = columns
       .filter((column) => column.type !== 'action')
       .map((column) => {
         const { hidden, ...rest } = column;
@@ -58,7 +70,23 @@ export const useColumns = <TData>({
           hidden: get(columnsObj, column.key, !!hidden),
         };
       });
-  }, [key, storedColumns, columns]);
+
+    if (isEmpty(order)) return dataColumns;
+
+    const columnMap = new Map(dataColumns.map((c) => [c.key, c]));
+
+    const ordered = order
+      .map((k) => columnMap.get(k))
+      .filter((c): c is (typeof dataColumns)[number] => c !== undefined);
+
+    // append any new columns not yet in the stored order
+    const orderedKeys = new Set(order);
+    dataColumns
+      .filter((c) => !orderedKeys.has(c.key))
+      .forEach((c) => ordered.push(c));
+
+    return ordered;
+  }, [key, storedColumns, columnOrders, columns]);
 
   const handleColumnsChange = useCallback(
     (column: ColumnType<TData>, value: boolean) => {
@@ -73,7 +101,32 @@ export const useColumns = <TData>({
     [key, setColumns, storedColumns]
   );
 
+  const moveColumn = useCallback(
+    (fromKey: string, toKey: string) => {
+      if (fromKey === toKey) return;
+
+      const currentOrder: string[] = get(
+        columnOrders,
+        key,
+        columns.filter((c) => c.type !== 'action').map((c) => c.key)
+      );
+
+      const fromIndex = currentOrder.indexOf(fromKey);
+      const toIndex = currentOrder.indexOf(toKey);
+
+      if (fromIndex === -1 || toIndex === -1) return;
+
+      const newOrder = [...currentOrder];
+      newOrder.splice(fromIndex, 1);
+      newOrder.splice(toIndex, 0, fromKey);
+
+      setColumnOrder(key, newOrder);
+    },
+    [key, columnOrders, columns, setColumnOrder]
+  );
+
   const resetColumns = useCallback(() => {
+    const dataColumns = columns.filter((c) => c.type !== 'action');
     const columnsObj: Record<string, boolean> = {};
     columns.forEach((column) => {
       Object.assign(columnsObj, { [column.key]: !!column.hidden });
@@ -83,11 +136,16 @@ export const useColumns = <TData>({
       ...storedColumns,
       [key]: columnsObj,
     });
-  }, [key, setColumns, storedColumns, columns]);
+    setColumnOrder(
+      key,
+      dataColumns.map((c) => c.key)
+    );
+  }, [key, setColumns, setColumnOrder, storedColumns, columns]);
 
   return {
     formattedColumns,
     handleColumnsChange,
+    moveColumn,
     resetColumns,
   };
 };
