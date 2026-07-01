@@ -143,7 +143,7 @@ export const MyTable = <TData,>({
                 style={column.styles}
                 draggable={!!onMoveColumn}
                 className={cn(
-                  'p-2',
+                  'p-2 uppercase',
                   column.sortable && 'cursor-pointer',
                   onMoveColumn && 'cursor-grab select-none',
                   dragOverKey === column.key && 'bg-accent/50'
@@ -227,7 +227,7 @@ export const MyTable = <TData,>({
                 .filter((column) => !column.hidden)
                 .map((column) => (
                   <TableCell
-                    className={'text-body-xs-medium max-w-xs p-2'}
+                    className={'text-body-xs-regular max-w-xs p-2'}
                     style={column.styles}
                     key={`${index}-${column.key}`}
                   >
