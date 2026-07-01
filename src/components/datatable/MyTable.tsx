@@ -143,7 +143,7 @@ export const MyTable = <TData,>({
                 style={column.styles}
                 draggable={!!onMoveColumn}
                 className={cn(
-                  'p-2 uppercase',
+                  'text-body-2xs-medium p-2 uppercase',
                   column.sortable && 'cursor-pointer',
                   onMoveColumn && 'cursor-grab select-none',
                   dragOverKey === column.key && 'bg-accent/50'
