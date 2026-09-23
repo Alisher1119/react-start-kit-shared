@@ -2,7 +2,7 @@ import { RiArrowDownSLine, RiLayoutColumnLine } from '@remixicon/react';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { RefreshCw } from 'lucide-react';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-start-kit/button';
 import {
@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'react-start-kit/dropdown';
+import { Switch } from 'react-start-kit/form';
 import { cn } from 'react-start-kit/utils';
 import { useColumns } from '../../hooks';
 import type { ColumnType } from '../../types';
@@ -71,6 +72,19 @@ export interface PaginationInterface<TData> {
 }
 
 /**
+ * Configuration for `DataTable`'s `headerToggle` prop: a single on/off switch
+ * rendered in the header row, bound directly to a `params` field.
+ */
+export interface DataTableHeaderToggle {
+  /** Label shown next to the switch. */
+  label: ReactNode;
+  /** The `params` key this toggle reads and writes. */
+  paramField: string;
+  /** Value written to `params[paramField]` when switched on. Defaults to `true`. */
+  onValue?: unknown;
+}
+
+/**
  * Props for the DataTable component.
  *
  * @template TData - Row data type.
@@ -98,6 +112,18 @@ export interface DataTableProps<
   actions?: ActionInterface[];
   /** Callback for filter changes. */
   handleFilterChange?: (filters: Record<string, unknown>) => void;
+  /**
+   * A single on/off switch rendered in the header row (e.g. "Only unread"),
+   * bound to a `params` field. Emits through `onParamChange` like every other
+   * header control. Omitted entirely (not just hidden) when not set.
+   */
+  headerToggle?: DataTableHeaderToggle;
+  /**
+   * Arbitrary content rendered in the header row's trailing group, alongside
+   * the export/columns/actions/filters controls (e.g. a date range picker
+   * scoped to this table).
+   */
+  headerContent?: ReactNode;
   /** Unique key for the table, used for column persistence. */
   tableKey: string;
   /** The key in dataSource where the data array is located. Defaults to "docs". */
@@ -211,6 +237,8 @@ export interface DataTableProps<
  * @param filters - Filter configurations to render.
  * @param actions - Header actions.
  * @param handleFilterChange - Callback executed when filter values change.
+ * @param headerToggle - A single on/off switch rendered in the header row, bound to a `params` field.
+ * @param headerContent - Arbitrary content rendered in the header row's trailing group.
  * @param params - Current list parameters.
  * @param exportLoading - Whether the export action is loading.
  * @param onColumnsUpdate - Notifies parent whenever columns state changes.
@@ -245,6 +273,8 @@ export const DataTable = <
   filters,
   actions,
   handleFilterChange,
+  headerToggle,
+  headerContent,
   params,
   exportLoading = false,
   onColumnsUpdate,
@@ -262,6 +292,7 @@ export const DataTable = <
   const { t } = useTranslation();
   const { formattedColumns, handleColumnsChange, moveColumn, resetColumns } =
     useColumns<TData>({ key: tableKey, columns });
+  const headerToggleId = useId();
 
   useEffect(() => {
     onColumnsUpdate?.(formattedColumns);
@@ -278,7 +309,9 @@ export const DataTable = <
         {(hasSearch ||
           (hasColumnsVisibilityDropdown && tableKey) ||
           !isEmpty(exportOptions) ||
-          !isEmpty(filters)) && (
+          !isEmpty(filters) ||
+          headerToggle ||
+          headerContent) && (
           <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
             <div className={'grow'}>
               {hasSearch && (
@@ -303,6 +336,31 @@ export const DataTable = <
               )}
             </div>
             <div className={'flex items-center justify-end gap-3'}>
+              {headerToggle && (
+                <div className={'flex items-center gap-2'}>
+                  <label
+                    htmlFor={headerToggleId}
+                    className={'cursor-pointer text-sm whitespace-nowrap'}
+                  >
+                    {headerToggle.label}
+                  </label>
+                  <Switch
+                    id={headerToggleId}
+                    checked={!!get(params, headerToggle.paramField)}
+                    onCheckedChange={(checked) => {
+                      const value = { ...params };
+                      if (checked) {
+                        value[headerToggle.paramField] =
+                          headerToggle.onValue ?? true;
+                      } else {
+                        delete value[headerToggle.paramField];
+                      }
+                      onParamChange?.({ ...value, page: 1 });
+                    }}
+                  />
+                </div>
+              )}
+              {headerContent}
               {exportOptions && (
                 <ExportData
                   {...exportOptionsProps}
