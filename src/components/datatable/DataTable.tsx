@@ -25,13 +25,13 @@ import {
   type ExportDataProps,
 } from '../export';
 import {
+  AppliedFilters,
   type FilterInterface,
   FilterWrapper,
   type FilterWrapperProps,
   Search,
   type SearchProps,
 } from '../filters';
-import { AppliedFilters } from '../filters/AppliedFilters.tsx';
 import { Loader } from '../loader';
 import { MyLimitSelect, MyPagination } from '../pagination';
 import type { MyPaginationProps } from '../pagination/MyPagination.tsx';
