@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { Skeleton } from 'react-start-kit/skeleton';
 import { cn } from 'react-start-kit/utils';
 
 /**
@@ -72,6 +73,10 @@ export type MyGalleryProps = HTMLAttributes<HTMLDivElement> & {
   actionButtons?: GalleryActionButton[];
   /** Whether to show image title overlay on thumbnails. */
   hasInfo?: true;
+  /** Renders `skeletonCount` placeholder tiles instead of `images` while true. */
+  isLoading?: boolean;
+  /** Number of placeholder tiles to render while `isLoading` is true. Defaults to 8. */
+  skeletonCount?: number;
 };
 
 /**
@@ -178,6 +183,8 @@ const Thumbnail = memo(
  * @param props.fallbackImage - URL used when an image fails to load.
  * @param props.actionButtons - Custom action buttons rendered in fullscreen.
  * @param props.hasInfo - Whether to show image title overlay on thumbnails.
+ * @param props.isLoading - Renders placeholder tiles instead of `images` while true.
+ * @param props.skeletonCount - Number of placeholder tiles to render while loading.
  * @returns {JSX.Element} A gallery component with thumbnail grid and fullscreen viewer
  */
 const MyGalleryComponent = ({
@@ -187,6 +194,8 @@ const MyGalleryComponent = ({
   fallbackImage,
   className,
   hasInfo,
+  isLoading,
+  skeletonCount = 8,
   ...props
 }: MyGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -389,26 +398,33 @@ const MyGalleryComponent = ({
           className
         )}
       >
-        {images.map((image, index) => (
-          <div className={'relative'} key={image.id}>
-            <Thumbnail
-              {...thumbnailProps}
-              image={image}
-              index={index}
-              onClick={openFullscreen}
-              fallbackImage={fallbackImage}
-            />
-            {hasInfo && image.title && (
-              <div
-                className={
-                  'bg-bg/70 absolute bottom-0 flex min-h-10 w-full items-center justify-center text-center'
-                }
-              >
-                {image.title}
+        {isLoading
+          ? Array.from({ length: skeletonCount }).map((_, index) => (
+              <Skeleton
+                key={index}
+                className={'aspect-video w-full rounded-lg'}
+              />
+            ))
+          : images.map((image, index) => (
+              <div className={'relative'} key={image.id}>
+                <Thumbnail
+                  {...thumbnailProps}
+                  image={image}
+                  index={index}
+                  onClick={openFullscreen}
+                  fallbackImage={fallbackImage}
+                />
+                {hasInfo && image.title && (
+                  <div
+                    className={
+                      'bg-bg/70 absolute bottom-0 flex min-h-10 w-full items-center justify-center text-center'
+                    }
+                  >
+                    {image.title}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+            ))}
       </div>
 
       {FullscreenView}
