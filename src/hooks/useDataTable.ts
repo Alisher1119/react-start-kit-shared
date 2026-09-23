@@ -89,7 +89,8 @@ export const useDataTable = <TData>({
           selectedRowsCountInPage++;
         }
       }
-      return currentPageRowKeys.length === selectedRowsCountInPage
+      return currentPageRowKeys.length > 0 &&
+        currentPageRowKeys.length === selectedRowsCountInPage
         ? true
         : selectedRowsCountInPage
           ? 'indeterminate'
