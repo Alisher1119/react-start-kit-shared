@@ -3,7 +3,7 @@ import { SortOrder } from '../enums';
 
 export interface UseSortableProps<TData> {
   /** Current field being sorted by */
-  sort?: keyof TData;
+  sort?: keyof TData | string;
   /** Current sort order (asc or desc) */
   order?: SortOrder;
   /** Callback triggered when sort state changes */
@@ -22,7 +22,7 @@ export interface UseSortableProps<TData> {
  * @param onSortOrderChange - Callback with new sort state.
  * @returns {Object} Sort management object
  * @returns {Object} sortObject - Current sort state with sort and order
- * @returns {(field: keyof TData) => void} handleSort - Function to trigger sort on a field
+ * @returns {(field: keyof TData | string) => void} handleSort - Function to trigger sort on a field
  */
 export const useSortable = <TData>({
   sort,
@@ -30,7 +30,7 @@ export const useSortable = <TData>({
   onSortOrderChange,
 }: UseSortableProps<TData>) => {
   const [sortObject, setSortObject] = useState<{
-    sort?: keyof TData;
+    sort?: keyof TData | string;
     order?: SortOrder;
   }>();
 
@@ -48,7 +48,7 @@ export const useSortable = <TData>({
   }, [sort, order]);
 
   const handleSort = useCallback(
-    (field: keyof TData) => {
+    (field: keyof TData | string) => {
       setSortObject((prev) => {
         const isSameField = prev?.sort === field;
         const newSortOrder = isSameField

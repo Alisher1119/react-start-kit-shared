@@ -100,7 +100,7 @@ export const MyTable = <TData,>({
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
 
   const { sortObject, handleSort } = useSortable<TData>({
-    sort: params?.sort as keyof TData | undefined,
+    sort: params?.sort as keyof TData | string | undefined,
     order: params?.order as SortOrder | undefined,
     onSortOrderChange,
   });
@@ -148,7 +148,10 @@ export const MyTable = <TData,>({
                   onMoveColumn && 'cursor-grab select-none',
                   dragOverKey === column.key && 'bg-accent/50'
                 )}
-                onClick={() => column.sortable && handleSort(column.dataIndex)}
+                onClick={() =>
+                  column.sortable &&
+                  handleSort(column.sortKey ?? column.dataIndex)
+                }
                 onDragStart={() => {
                   dragKey.current = column.key;
                 }}
@@ -174,7 +177,8 @@ export const MyTable = <TData,>({
                 <div className={'flex items-center gap-2'}>
                   {column.name}{' '}
                   {column.sortable &&
-                    (sortObject?.sort === column.key ? (
+                    (sortObject?.sort ===
+                    (column.sortKey ?? column.dataIndex) ? (
                       <>
                         {sortObject?.order === SortOrder.DESC && (
                           <ArrowDownWideNarrow
