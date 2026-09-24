@@ -21,6 +21,8 @@ export type ColumnType<TData> = {
     hidden?: boolean;
     /** Whether the column is sortable. */
     sortable?: boolean;
+    /** Field sent to the API when sorting by this column, e.g. a nested path like 'group.name'. Falls back to dataIndex. */
+    sortKey?: string;
     /** The type of the column, either data or action. */
     type?: 'data' | 'action';
     /** Custom render function for the cell content. */
