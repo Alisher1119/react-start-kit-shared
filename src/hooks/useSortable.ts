@@ -3,9 +3,9 @@ import { SortOrder } from '../enums';
 
 export interface UseSortableProps<TData> {
   /** Current field being sorted by */
-  sortField?: keyof TData;
-  /** Current sort order (ASC or DESC) */
-  sortOrder?: SortOrder;
+  sort?: keyof TData;
+  /** Current sort order (asc or desc) */
+  order?: SortOrder;
   /** Callback triggered when sort state changes */
   onSortOrderChange?: (
     newSortOrder: Omit<UseSortableProps<TData>, 'onSortOrderChange'>
@@ -14,52 +14,52 @@ export interface UseSortableProps<TData> {
 
 /**
  * useSortable manages sort field and order for tables and lists.
- * Cycles through ASC -> DESC -> none for a given field and emits changes.
+ * Cycles through asc -> desc -> none for a given field and emits changes.
  *
  * @template TData - Row data type.
- * @param sortField - Current sorted field.
- * @param sortOrder - Current sort order.
+ * @param sort - Current sorted field.
+ * @param order - Current sort order.
  * @param onSortOrderChange - Callback with new sort state.
  * @returns {Object} Sort management object
- * @returns {Object} sortObject - Current sort state with sortField and sortOrder
+ * @returns {Object} sortObject - Current sort state with sort and order
  * @returns {(field: keyof TData) => void} handleSort - Function to trigger sort on a field
  */
 export const useSortable = <TData>({
-  sortField,
-  sortOrder,
+  sort,
+  order,
   onSortOrderChange,
 }: UseSortableProps<TData>) => {
   const [sortObject, setSortObject] = useState<{
-    sortField?: keyof TData;
-    sortOrder?: SortOrder;
+    sort?: keyof TData;
+    order?: SortOrder;
   }>();
 
   useEffect(() => {
-    if (sortField) {
+    if (sort) {
       setSortObject((prevState) =>
-        prevState?.sortField === sortOrder && prevState?.sortOrder === sortOrder
+        prevState?.sort === sort && prevState?.order === order
           ? prevState
           : {
-              sortField,
-              sortOrder: sortOrder || undefined,
+              sort,
+              order: order || undefined,
             }
       );
     }
-  }, [sortField, sortOrder]);
+  }, [sort, order]);
 
   const handleSort = useCallback(
     (field: keyof TData) => {
       setSortObject((prev) => {
-        const isSameField = prev?.sortField === field;
+        const isSameField = prev?.sort === field;
         const newSortOrder = isSameField
-          ? prev?.sortOrder === SortOrder.ASC
+          ? prev?.order === SortOrder.ASC
             ? SortOrder.DESC
             : undefined
           : SortOrder.ASC;
 
         const newSortObject = {
-          sortField: newSortOrder ? field : undefined,
-          sortOrder: newSortOrder,
+          sort: newSortOrder ? field : undefined,
+          order: newSortOrder,
         };
 
         if (onSortOrderChange) {

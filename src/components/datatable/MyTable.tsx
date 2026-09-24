@@ -100,8 +100,8 @@ export const MyTable = <TData,>({
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
 
   const { sortObject, handleSort } = useSortable<TData>({
-    sortField: params?.sortField as keyof TData | undefined,
-    sortOrder: params?.sortOrder as SortOrder | undefined,
+    sort: params?.sort as keyof TData | undefined,
+    order: params?.order as SortOrder | undefined,
     onSortOrderChange,
   });
   const {
@@ -174,17 +174,20 @@ export const MyTable = <TData,>({
                 <div className={'flex items-center gap-2'}>
                   {column.name}{' '}
                   {column.sortable &&
-                    (sortObject?.sortField === column.key ? (
+                    (sortObject?.sort === column.key ? (
                       <>
-                        {sortObject?.sortOrder === SortOrder.DESC && (
-                          <ArrowDownWideNarrow size={15} />
+                        {sortObject?.order === SortOrder.DESC && (
+                          <ArrowDownWideNarrow
+                            size={15}
+                            className={'shrink-0'}
+                          />
                         )}
-                        {sortObject?.sortOrder === SortOrder.ASC && (
-                          <ArrowUpWideNarrow size={15} />
+                        {sortObject?.order === SortOrder.ASC && (
+                          <ArrowUpWideNarrow size={15} className={'shrink-0'} />
                         )}
                       </>
                     ) : (
-                      <ArrowUpDown size={15} />
+                      <ArrowUpDown size={15} className={'shrink-0'} />
                     ))}
                 </div>
               </TableHead>

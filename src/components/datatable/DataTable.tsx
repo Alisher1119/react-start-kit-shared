@@ -220,7 +220,7 @@ export interface DataTableProps<
  * Notes and Best Practices
  * - Ensure `rowKey` points to a stable unique field in `TData` to avoid key collisions.
  * - When arrays like `exportOptions`, `filters`, or `actions` are empty, their sections are not rendered.
- * - Sorting emits `{ sortField, sortOrder }` through `onParamChange` when the user toggles a column sort.
+ * - Sorting emits `{ sort, order }` through `onParamChange` when the user toggles a column sort.
  *
  * @template TData - Row data type.
  * @template TPaginationData - Pagination wrapper type.
@@ -465,8 +465,8 @@ export const DataTable = <
             rowKey={rowKey}
             columns={formattedColumns}
             onMoveColumn={moveColumn}
-            onSortOrderChange={({ sortField, sortOrder }) => {
-              onParamChange?.({ ...params, sortField, sortOrder });
+            onSortOrderChange={({ sort, order }) => {
+              onParamChange?.({ ...params, sort, order });
             }}
           />
         ) : (
